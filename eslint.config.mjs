@@ -54,6 +54,9 @@ const config = [
       parser: espree,
       sourceType: 'module',
       ecmaVersion: 'latest',
+      // Drop the inherited 'next/babel' preset entirely (espree ignores it, but
+      // this keeps the resolved config free of any next/babel reference).
+      parserOptions: { babelOptions: { presets: [] } },
     },
   },
   prettier,
