@@ -7,3 +7,11 @@ export enum Locale {
 export enum LanguageTag {
   Default = 'en',
 }
+
+/** Display-currency preference (menu). A preference only until
+    multi-market backends land — checkout stays in store currency. */
+export enum CurrencyPreference {
+  Eur = 'EUR',
+  Usd = 'USD',
+  Bgn = 'BGN',
+}

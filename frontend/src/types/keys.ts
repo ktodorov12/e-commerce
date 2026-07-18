@@ -6,6 +6,7 @@ export enum CookieKey {
 /** localStorage keys (versioned; reads are always wrapped in try/catch). */
 export enum StorageKey {
   ThemePreference = 'ew.theme.v1',
+  CurrencyPreference = 'ew.currency.v1',
 }
 
 /** URL query parameters understood by the product listing. */

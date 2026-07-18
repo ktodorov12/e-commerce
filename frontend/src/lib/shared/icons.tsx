@@ -1,7 +1,5 @@
 import {
-  ArrowRight,
   AtSign,
-  ChevronDown,
   Heart,
   House,
   Menu,
@@ -38,8 +36,6 @@ export const MenuIcon = withHouseStyle(Menu);
 export const CloseIcon = withHouseStyle(X);
 export const PlusIcon = withHouseStyle(Plus);
 export const MinusIcon = withHouseStyle(Minus);
-export const ArrowRightIcon = withHouseStyle(ArrowRight);
-export const ChevronDownIcon = withHouseStyle(ChevronDown);
 export const HomeIcon = withHouseStyle(House);
 export const ShopIcon = withHouseStyle(Store);
 export const SearchIcon = withHouseStyle(Search);

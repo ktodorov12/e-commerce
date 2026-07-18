@@ -1,7 +1,6 @@
 import type { Collection } from '@exclusive-wear/shopify';
 
 import { siteContent } from '@/content/site';
-import { ArrowRightIcon } from '@/lib/shared/icons';
 import { Link } from '@/lib/shared/Link';
 import { ProductImage } from '@/lib/shared/ProductImage';
 import { AppRoute } from '@/types/routes';
@@ -47,12 +46,8 @@ export const CollectionsShowcase = ({
               className="aspect-[7/3] transition-transform duration-300 ease-[var(--ease-soft)] group-hover:scale-[1.01] md:aspect-[4/3]"
               placeholderLabel={collection.title}
             />
-            <span className="absolute inset-x-0 bottom-0 flex items-center gap-3 bg-gradient-to-t from-[color-mix(in_srgb,var(--color-ground)_85%,transparent)] to-[transparent] px-4 pt-8 pb-4 text-h5 text-ink">
+            <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[color-mix(in_srgb,var(--color-ground)_85%,transparent)] to-[transparent] px-4 pt-8 pb-4 text-h5 text-ink">
               {collection.title}
-              <ArrowRightIcon
-                size={14}
-                className="text-accent-ink transition-transform duration-300 ease-[var(--ease-soft)] group-hover:translate-x-1"
-              />
             </span>
           </Link>
         ))}
@@ -69,13 +64,7 @@ export const CollectionsShowcase = ({
             CAPSULE_TONE_CLASSES[capsule.tone],
           )}
         >
-          <span className="flex items-center gap-2 text-h5">
-            {capsule.label}
-            <ArrowRightIcon
-              size={14}
-              className="transition-transform duration-300 ease-[var(--ease-soft)] group-hover:translate-x-1"
-            />
-          </span>
+          <span className="text-h5">{capsule.label}</span>
           <span className="text-xs opacity-70">{capsule.note}</span>
         </Link>
       ))}

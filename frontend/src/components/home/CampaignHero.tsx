@@ -1,6 +1,5 @@
 import { CampaignFilm } from '@/components/home/CampaignFilm';
 import { siteContent } from '@/content/site';
-import { ChevronDownIcon } from '@/lib/shared/icons';
 import { Link } from '@/lib/shared/Link';
 import { AppRoute } from '@/types/routes';
 
@@ -54,13 +53,6 @@ export const CampaignHero = () => (
             {siteContent.hero.ctaSecondary}
           </Link>
         </div>
-
-        <span
-          aria-hidden
-          className="animate-bounce-soft mt-2 self-center text-ink-muted motion-reduce:animate-none"
-        >
-          <ChevronDownIcon />
-        </span>
       </div>
     </div>
   </section>

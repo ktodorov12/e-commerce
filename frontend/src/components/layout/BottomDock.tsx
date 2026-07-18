@@ -14,11 +14,11 @@ import { ButtonSize, ButtonVariant } from '@/types/ui';
 import { cx } from '@/utils/cx';
 
 /**
- * The bottom dock (design 1b/1i): part of the screen — fixed to the
- * bottom on every page, icon-only, the accent tick marks where you
- * are. It keeps the same inset-and-rounded language as every other
- * component: a few px in from the edges, ground visible around and
- * behind the translucent pill.
+ * The bottom dock (design 1b/1i, YouTube-style): part of the screen —
+ * full-width, flush to the bottom edge on every page, icon-only, the
+ * accent tick marks where you are. The top corners curve down into the
+ * screen edges (the "wave", radius-xl) so the pill reads as spilling
+ * out to the edges, with the ground visible above the curves.
  */
 
 const DOCK_LINKS = [
@@ -82,33 +82,36 @@ export const BottomDock = () => {
     <nav
       aria-label={siteContent.a11y.bottomNavigation}
       className={cx(
-        'fixed inset-x-4 bottom-4 z-40 mx-auto flex h-20 max-w-[420px] items-stretch',
-        'rounded-lg border border-divider',
+        'fixed inset-x-0 bottom-0 z-40',
+        'rounded-t-xl border border-b-0 border-divider',
         'bg-[color-mix(in_srgb,var(--color-surface)_92%,transparent)] shadow-lg backdrop-blur-md',
+        'pb-[env(safe-area-inset-bottom)]',
       )}
     >
-      {DOCK_LINKS.map(({ href, label, Icon }) => {
-        const active = isDockRouteActive(pathname, href);
-        return (
-          <Link
-            key={href}
-            href={href}
-            aria-label={label}
-            aria-current={active ? 'page' : undefined}
-            className={cx(
-              DOCK_ITEM_CLASSES,
-              active ? 'text-accent-ink' : 'text-ink-muted hover:text-ink',
-            )}
-          >
-            {active ? (
-              <span aria-hidden className="absolute top-2 h-1 w-8 rounded-full bg-accent" />
-            ) : null}
-            <Icon size={DOCK_ICON_SIZE} />
-          </Link>
-        );
-      })}
-      <DockBagButton />
-      <DockMenuButton />
+      <div className="mx-auto flex h-20 max-w-[420px] items-stretch">
+        {DOCK_LINKS.map(({ href, label, Icon }) => {
+          const active = isDockRouteActive(pathname, href);
+          return (
+            <Link
+              key={href}
+              href={href}
+              aria-label={label}
+              aria-current={active ? 'page' : undefined}
+              className={cx(
+                DOCK_ITEM_CLASSES,
+                active ? 'text-accent-ink' : 'text-ink-muted hover:text-ink',
+              )}
+            >
+              {active ? (
+                <span aria-hidden className="absolute top-2 h-1 w-8 rounded-full bg-accent" />
+              ) : null}
+              <Icon size={DOCK_ICON_SIZE} />
+            </Link>
+          );
+        })}
+        <DockBagButton />
+        <DockMenuButton />
+      </div>
     </nav>
   );
 };

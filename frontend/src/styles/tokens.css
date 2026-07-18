@@ -43,7 +43,6 @@
   --motion-crossfade: 400ms;
   --motion-drawer: 400ms;
   --motion-drift: 9s;
-  --motion-bounce: 1.8s;
 
   /* Top bar height — the hero fills the viewport minus exactly this. */
   --topbar-height: 58px;
@@ -109,6 +108,9 @@
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 14px;
+  /* xl is reserved for the bottom dock's wave — the top corners that
+     curve down into the screen edges. */
+  --radius-xl: 24px;
 
   --shadow-sm: var(--ew-shadow-sm);
   --shadow-md: var(--ew-shadow-md);
@@ -150,7 +152,6 @@
   --animate-rise: rise var(--motion-rise) var(--ease-soft) both;
   --animate-slow-zoom: slow-zoom var(--motion-zoom) var(--ease-soft) forwards;
   --animate-drift: drift var(--motion-drift) ease-in-out infinite;
-  --animate-bounce-soft: bounce-soft var(--motion-bounce) ease-in-out infinite;
 }
 
 /* Ambient glow drift behind the campaign film placeholder (design 1b). */
@@ -164,18 +165,6 @@
   }
 }
 
-/* Scroll-cue chevron pulse (design 1b). */
-@keyframes bounce-soft {
-  0%,
-  100% {
-    transform: translateY(0);
-    opacity: 0.9;
-  }
-  50% {
-    transform: translateY(6px);
-    opacity: 0.4;
-  }
-}
 
 @keyframes rise {
   from {

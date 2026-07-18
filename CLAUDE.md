@@ -175,7 +175,8 @@ Both are defined in `styles/tokens.css` and mapped into Tailwind via `@theme inl
 default palette **dropped** (`--color-*: initial`). Utilities are role-based and mode-aware:
 `bg-ground`, `bg-surface`, `text-ink`, `text-ink-muted`, `text-accent`, `border-divider`,
 `bg-cta`/`text-cta-text`/`border-cta-border`, `shadow-sm|md|lg`, `text-h1…h6`, `rounded-sm|md|lg`.
-Density is **0.70×** (`--spacing: 2.8px`), radii 4/8/14, Inter (`--font-sans`) plus a script
+Density is **0.70×** (`--spacing: 2.8px`), radii 4/8/14 (+24 `xl`, reserved for the bottom
+dock's wave), Inter (`--font-sans`) plus a script
 accent face (Great Vibes, `--font-script` / `font-script`) reserved for the hero welcome line,
 headings capped at weight 500 (hierarchy by size + space, never bolding). Icons: **lucide-react**, wrapped once in
 `lib/shared/icons.tsx` — the **only** lucide import point; the wrapper pins the house style
@@ -200,10 +201,13 @@ headings capped at weight 500 (hierarchy by size + space, never bolding). Icons:
 - **Navigation (chosen pattern):** no announcement bar. The top bar carries the wordmark only
   (the wordmark is the Home link) and exists **only at the very top of the page** — scroll and it
   drops away for good (transform-only via `hooks/useScrollChrome.ts`, so nothing jitters).
-  Primary wayfinding is the **bottom dock** (`components/layout/BottomDock.tsx`, design 1b/1i):
-  **fixed to the bottom on every page**, icon-only Home / Shop / Search / Saved / Bag / Menu,
-  inset a few px from the edges with the ground visible around the translucent pill. Page content
-  clears it via the `dock-clearance` body utility.
+  Primary wayfinding is the **bottom dock** (`components/layout/BottomDock.tsx`, design 1b/1i,
+  YouTube-style): **full-width and flush to the bottom edge on every page**, icon-only Home /
+  Shop / Search / Saved / Bag / Menu. Its top corners curve down into the screen edges (the
+  "wave", `rounded-t-xl`) so the pill reads as spilling out to the edges, ground visible above
+  the curves. Page content clears it via the `dock-clearance` body utility. The burger opens a
+  full-screen menu of **grid tiles** — the four destinations plus the appearance and currency
+  preference switches (currency is display-only until multi-market backends land).
 
 ---
 

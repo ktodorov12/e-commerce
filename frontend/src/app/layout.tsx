@@ -10,8 +10,8 @@ import { BottomDock } from '@/components/layout/BottomDock';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
 import { MenuDrawer } from '@/components/layout/MenuDrawer';
+import { PreferencesHydrator } from '@/components/layout/PreferencesHydrator';
 import { Providers } from '@/components/layout/Providers';
-import { ThemeHydrator } from '@/components/layout/ThemeHydrator';
 import { ThemeScript } from '@/components/layout/ThemeScript';
 import { siteContent } from '@/content/site';
 import { LanguageTag } from '@/types/i18n';
@@ -66,7 +66,7 @@ export default function RootLayout({ children }: { readonly children: ReactNode 
           <MenuDrawer />
           <CartDrawer />
           <CartHydrator />
-          <ThemeHydrator />
+          <PreferencesHydrator />
         </Providers>
       </body>
     </html>
