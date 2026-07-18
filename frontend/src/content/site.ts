@@ -1,3 +1,6 @@
+import { InfoTopic } from '@/types/routes';
+import { CapsuleTone } from '@/types/ui';
+
 /**
  * All user-facing copy, centralized. Wording comes from design/
  * ("Exclusive Wear — Mobile Concepts"). Keeping copy here keeps
@@ -10,14 +13,12 @@ export const siteContent = {
     description:
       'Contemporary luxury menswear and womenswear — cut in Portugal, finished by hand.',
   },
-  announcements: [
-    'FREE SHIPPING OVER €200',
-    'SUMMER SALE UP TO −70%',
-    'NEW DROP: LINEN CAPSULE',
-  ],
   nav: {
     shopAll: 'Shop All',
     home: 'Home',
+    search: 'Search',
+    saved: 'Saved',
+    bag: 'Bag',
     menuTitle: 'Menu',
     appearance: 'Appearance',
     appearanceNote: 'Follows system, one-tap override',
@@ -26,8 +27,8 @@ export const siteContent = {
     auto: 'AUTO',
   },
   hero: {
-    kicker: 'SS26 — DROP 02',
     headline: 'Quiet pieces, worn loud.',
+    tagline: 'Premium, quiet essentials for a modern mindset.',
     ctaPrimary: 'For Him',
     ctaSecondary: 'For Her',
   },
@@ -39,6 +40,100 @@ export const siteContent = {
     kicker: 'THE ATELIER',
     headline: 'Cut in Portugal. Finished by hand.',
     body: 'Every piece is produced in a single family-run atelier outside Porto — 40 people, no seasons rushed.',
+  },
+  collections: {
+    title: 'Collections',
+    /** Curated capsules shown next to the backend collections — they all
+        route to the listing until per-collection pages exist. */
+    curated: [
+      { label: 'New Arrivals', note: 'Fresh from the atelier', tone: CapsuleTone.Fresh },
+      { label: 'Winter Capsule', note: 'Layered for the cold', tone: CapsuleTone.Frost },
+      { label: 'Promo', note: 'Up to −70%', tone: CapsuleTone.Sale },
+      { label: 'Special Edition', note: 'One run, numbered', tone: CapsuleTone.Gold },
+    ],
+  },
+  community: {
+    kicker: 'THE PEOPLE',
+    title: 'Worn out there',
+    handle: '@EXCLUSIVEWEAR',
+    captions: {
+      portraitOne: 'Mara — Porto',
+      portraitTwo: 'Theo — Copenhagen',
+      portraitThree: 'Amira — Milan',
+      portraitFour: 'Jonas — Antwerp',
+    },
+  },
+  searchPage: {
+    kicker: 'FIND A PIECE',
+    title: 'Search',
+    body: 'Search is being tailored — browse the full collection meanwhile.',
+    cta: 'Shop all pieces',
+  },
+  savedPage: {
+    kicker: 'YOUR EDIT',
+    title: 'Saved',
+    body: 'Nothing saved yet — tap the heart on a piece to keep it here.',
+    cta: 'Discover the drop',
+  },
+  footer: {
+    customerService: 'Customer service',
+    about: 'About us',
+    follow: 'Follow',
+    regionTitle: 'Region',
+    region: 'BE · € · EN',
+    serviceLinks: [
+      { topic: InfoTopic.Shipping, label: 'Shipping' },
+      { topic: InfoTopic.Returns, label: 'Returns' },
+      { topic: InfoTopic.Payment, label: 'Payment' },
+      { topic: InfoTopic.TrackOrder, label: 'Track order' },
+    ],
+    aboutLinks: [
+      { topic: InfoTopic.Terms, label: 'Terms & conditions' },
+      { topic: InfoTopic.Privacy, label: 'Privacy policy' },
+      { topic: InfoTopic.LegalNotice, label: 'Legal notice' },
+      { topic: InfoTopic.Contact, label: 'Contact' },
+    ],
+    socialInstagram: 'Instagram',
+    socialTelegram: 'Telegram',
+    payments: ['VISA', 'MASTERCARD', 'PAYPAL', 'KLARNA'],
+  },
+  info: {
+    kicker: 'INFORMATION',
+    cta: 'Continue shopping',
+    topics: {
+      [InfoTopic.Shipping]: {
+        title: 'Shipping',
+        body: '2–4 day delivery across Europe with tracked couriers. Orders placed before 14:00 CET leave the atelier the same day.',
+      },
+      [InfoTopic.Returns]: {
+        title: 'Returns',
+        body: 'Free returns within a 14-day window — unworn, tags attached. Register the return from your order email and drop the parcel at any pickup point.',
+      },
+      [InfoTopic.Payment]: {
+        title: 'Payment',
+        body: 'Visa, Mastercard, PayPal, Klarna and cash on delivery. Every payment runs through Shopify checkout — card details never touch our servers.',
+      },
+      [InfoTopic.TrackOrder]: {
+        title: 'Track order',
+        body: 'A tracking link arrives by email the moment your parcel leaves the atelier, and updates within a few hours of courier pickup.',
+      },
+      [InfoTopic.Terms]: {
+        title: 'Terms & conditions',
+        body: 'The legal terms governing orders, delivery and returns. The full document ships with the launch release.',
+      },
+      [InfoTopic.Privacy]: {
+        title: 'Privacy policy',
+        body: 'We collect only what an order needs — no tracking pixels, no resold data. The full policy ships with the launch release.',
+      },
+      [InfoTopic.LegalNotice]: {
+        title: 'Legal notice',
+        body: 'Exclusive Wear — registered in Portugal. Full company details are published with the launch release.',
+      },
+      [InfoTopic.Contact]: {
+        title: 'Contact',
+        body: 'Write to hello@exclusivewear.example — we answer within one business day, Monday to Friday.',
+      },
+    },
   },
   trust: [
     { title: '2–4 day delivery', note: 'Based in Europe' },
@@ -92,11 +187,10 @@ export const siteContent = {
     increaseQuantity: 'Increase quantity',
     decreaseQuantity: 'Decrease quantity',
     productImage: 'Product image',
-    announcement: 'Announcements',
     galleryImage: 'Gallery image',
     themeSwitch: 'Appearance mode',
-    toggleTheme: 'Switch between day and night theme',
     mainNavigation: 'Main navigation',
+    bottomNavigation: 'Primary',
   },
 } as const;
 

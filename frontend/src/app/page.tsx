@@ -1,24 +1,32 @@
-import { getFeaturedCollection } from '@exclusive-wear/shopify';
+import { getCollections, getFeaturedCollection } from '@exclusive-wear/shopify';
 
 import { AtelierStory } from '@/components/home/AtelierStory';
-import { Hero } from '@/components/home/Hero';
+import { CampaignHero } from '@/components/home/CampaignHero';
+import { CollectionsShowcase } from '@/components/home/CollectionsShowcase';
+import { CommunityStrip } from '@/components/home/CommunityStrip';
 import { NewArrivals } from '@/components/home/NewArrivals';
 import { TrustBadges } from '@/components/home/TrustBadges';
 
-/** Home: hero → featured collection → atelier story → trust row. */
+/** Home: campaign hero → new arrivals → atelier → collections → people → trust. */
 export const revalidate = 300;
 
+const COLLECTIONS_SHOWN = 3;
+
 export default async function HomePage() {
-  const featured = await getFeaturedCollection();
-  const heroImage = featured?.products.find((product) => product.image !== null)?.image ?? null;
+  const [featured, collections] = await Promise.all([
+    getFeaturedCollection(),
+    getCollections(COLLECTIONS_SHOWN),
+  ]);
 
   return (
     <>
-      <Hero image={heroImage} />
+      <CampaignHero />
       {featured !== null && featured.products.length > 0 ? (
         <NewArrivals collection={featured} />
       ) : null}
       <AtelierStory />
+      <CollectionsShowcase collections={collections} />
+      <CommunityStrip />
       <TrustBadges />
     </>
   );

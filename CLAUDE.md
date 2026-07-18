@@ -135,6 +135,9 @@ Opaque identifiers **the server itself issued and stored server-side**, and even
 - **Product `handle`** — `isShopifyHandle` validates a strict handle format before
   `getProductByHandle`; a miss is `notFound()`, never a raw error surface.
 
+(Same discipline off-Shopify: `app/info/[topic]` maps its segment onto the `InfoTopic` enum and
+404s anything else — no user-authored string ever selects content by interpolation.)
+
 (`isShopifyId` / `isShopifyHandle` live in the `shopify` package — the Shopify shapes stay in the
 Shopify layer.)
 
@@ -172,10 +175,35 @@ Both are defined in `styles/tokens.css` and mapped into Tailwind via `@theme inl
 default palette **dropped** (`--color-*: initial`). Utilities are role-based and mode-aware:
 `bg-ground`, `bg-surface`, `text-ink`, `text-ink-muted`, `text-accent`, `border-divider`,
 `bg-cta`/`text-cta-text`/`border-cta-border`, `shadow-sm|md|lg`, `text-h1…h6`, `rounded-sm|md|lg`.
-Density is **0.70×** (`--spacing: 2.8px`), radii 4/8/14, Inter (`--font-sans`), headings capped at
-weight 500 (hierarchy by size + space, never bolding). Icons: Phosphor (`lib/shared/icons.tsx`).
+Density is **0.70×** (`--spacing: 2.8px`), radii 4/8/14, Inter (`--font-sans`) plus a script
+accent face (Great Vibes, `--font-script` / `font-script`) reserved for the hero welcome line,
+headings capped at weight 500 (hierarchy by size + space, never bolding). Icons: **lucide-react**, wrapped once in
+`lib/shared/icons.tsx` — the **only** lucide import point; the wrapper pins the house style
+(18px, 1.5 stroke, `aria-hidden`), so components never import lucide directly.
 
 **Components consume tokens only — never a raw hex, px, or font name.** Rule 1 applies to design values.
+
+### Composition rules (mobile-first — apply to every screen)
+
+- **Mobile first.** Style the ~390px layout first; `md:` only widens or relaxes it. Never design
+  desktop-down.
+- **Type runs small.** The fixed scale is deliberately compact (`text-h1` = 34px). Hierarchy comes
+  from size steps, space and letterspacing — never from scaling text up. If a heading feels big, it
+  is: step down.
+- **Every element is inset.** Content never runs edge-to-edge: sections keep the `px-6` gutter,
+  media and cards sit in **rounded wells inside it**, floating chrome is inset from the viewport
+  edge. The page ground is the only full-bleed surface. No negative-margin "breakout" tricks.
+  **One sanctioned exception:** the homepage campaign hero bleeds edge-to-edge and fills the
+  viewport below the top bar — a **gif-like film** (autoplay · muted · loop, reduced-motion
+  gated), overlaid with a script welcome line and two compact CTAs. The checked-in
+  `public/campaign-film.webm` is a generated dummy; swap it for real footage, same filename.
+- **Navigation (chosen pattern):** no announcement bar. The top bar carries the wordmark only
+  (the wordmark is the Home link) and exists **only at the very top of the page** — scroll and it
+  drops away for good (transform-only via `hooks/useScrollChrome.ts`, so nothing jitters).
+  Primary wayfinding is the **bottom dock** (`components/layout/BottomDock.tsx`, design 1b/1i):
+  **fixed to the bottom on every page**, icon-only Home / Shop / Search / Saved / Bag / Menu,
+  inset a few px from the edges with the ground visible around the translucent pill. Page content
+  clears it via the `dock-clearance` body utility.
 
 ---
 
@@ -185,8 +213,8 @@ weight 500 (hierarchy by size + space, never bolding). Icons: Phosphor (`lib/sha
 app/            Routes (App Router). Thin — compose feature components, own loaders/guards.
   actions/      Server Actions (public endpoints: authenticate + validate every input).
 lib/shared/     Wrapper primitives we own: Button, Input, Link, Price, ProductImage, Drawer,
-                Skeleton, Accordion, SegmentedControl, Tag, icons. Feature code never uses
-                raw <button>/<input>/<a> — always the typed wrapper.
+                Skeleton, Accordion, SegmentedControl, Tag, EmptyState, icons. Feature code
+                never uses raw <button>/<input>/<a> — always the typed wrapper.
 components/     Feature folders: product/, cart/, collection/, home/, layout/.
 stores/         Zustand: createStoreHook factory + typed hook, per-domain mini stores/slices.
 machines/       XState machines (cart, menu) + their React context providers.

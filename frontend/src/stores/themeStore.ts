@@ -15,6 +15,7 @@ import type { ResolvedThemeMode } from '@/types/theme';
 
 export enum MediaQuery {
   PrefersDark = '(prefers-color-scheme: dark)',
+  PrefersReducedMotion = '(prefers-reduced-motion: reduce)',
 }
 
 const isThemeMode = (value: string | null): value is ThemeMode =>
@@ -62,16 +63,21 @@ const applyResolvedTheme = (resolved: ResolvedThemeMode): void => {
 
 export interface ThemeSlice {
   readonly preference: ThemeMode;
+  readonly hydratePreference: () => void;
   readonly setPreference: (preference: ThemeMode) => void;
 }
 
 export type ThemeStoreState = ThemeSlice;
 
-const initialPreference = (): ThemeMode =>
-  typeof window === 'undefined' ? ThemeMode.System : readStoredPreference();
-
 export const createThemeSlice: SliceCreator<ThemeStoreState, ThemeSlice> = (set) => ({
-  preference: initialPreference(),
+  // SSR and the first client render must agree (hydration contract), so the
+  // store boots on System everywhere; ThemeHydrator pulls the stored
+  // preference in after mount. The *painted* theme never waits for this —
+  // theme-init.js applies it pre-paint from the same storage key.
+  preference: ThemeMode.System,
+  hydratePreference: () => {
+    set({ preference: readStoredPreference() });
+  },
   setPreference: (preference) => {
     set({ preference });
     try {

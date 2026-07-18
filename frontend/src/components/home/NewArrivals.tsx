@@ -10,9 +10,9 @@ import { AppRoute } from '@/types/routes';
  * edge-peek). Horizontal scroll-snap on mobile, grid on desktop.
  */
 export const NewArrivals = ({ collection }: { readonly collection: FeaturedCollection }) => (
-  <section className="mx-auto w-full max-w-[1200px] px-6 py-20">
-    <div className="mb-8 flex items-baseline justify-between">
-      <h2 className="text-h3">{collection.title || siteContent.newArrivals.title}</h2>
+  <section className="mx-auto w-full max-w-[1200px] px-6 py-10">
+    <div className="mb-5 flex items-baseline justify-between">
+      <h2 className="text-h4">{collection.title || siteContent.newArrivals.title}</h2>
       <Link
         href={AppRoute.Products}
         className="kicker transition-colors hover:text-accent"
@@ -21,7 +21,7 @@ export const NewArrivals = ({ collection }: { readonly collection: FeaturedColle
       </Link>
     </div>
 
-    <div className="-mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-4 md:gap-6 md:overflow-visible md:px-0">
+    <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 [scrollbar-width:none] md:grid md:grid-cols-4 md:gap-6 md:overflow-visible">
       {collection.products.map((product, index) => (
         <div key={product.id} className="w-[42vw] max-w-[260px] shrink-0 snap-start md:w-auto md:max-w-none">
           <ProductCard product={product} priority={index < 2} />

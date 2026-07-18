@@ -14,6 +14,8 @@ import { ButtonSize, ButtonVariant, DrawerSide } from '@/types/ui';
 const MENU_LINKS = [
   { href: AppRoute.Home, label: siteContent.nav.home },
   { href: AppRoute.Products, label: siteContent.nav.shopAll },
+  { href: AppRoute.Search, label: siteContent.nav.search },
+  { href: AppRoute.Saved, label: siteContent.nav.saved },
 ] as const;
 
 export const MenuDrawer = () => {
@@ -23,7 +25,7 @@ export const MenuDrawer = () => {
   return (
     <Drawer open={open} onClose={close} side={DrawerSide.Full} label={siteContent.nav.menuTitle}>
       <div className="flex items-center justify-between px-6 py-4">
-        <span className="text-h5 tracking-[0.14em]">{siteContent.brand.name}</span>
+        <span className="text-wordmark text-ink">{siteContent.brand.name}</span>
         <Button
           variant={ButtonVariant.Ghost}
           size={ButtonSize.Icon}

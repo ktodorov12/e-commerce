@@ -27,12 +27,17 @@ const VARIANT_CLASSES: Readonly<Record<ButtonVariant, string>> = {
     'border-[transparent] bg-[transparent] text-accent-ink ' +
     'hover:bg-[color-mix(in_srgb,var(--color-accent)_10%,transparent)] ' +
     'active:bg-[color-mix(in_srgb,var(--color-accent)_18%,transparent)]',
+  [ButtonVariant.Dock]:
+    'border-[transparent] bg-[transparent] ' +
+    'hover:bg-[color-mix(in_srgb,var(--color-ink)_7%,transparent)] ' +
+    'active:bg-[color-mix(in_srgb,var(--color-ink)_14%,transparent)]',
 };
 
 const SIZE_CLASSES: Readonly<Record<ButtonSize, string>> = {
   [ButtonSize.Md]: 'px-4 py-2 text-sm',
   [ButtonSize.Lg]: 'w-full px-6 py-4 text-base',
   [ButtonSize.Icon]: 'h-12 w-12 p-0',
+  [ButtonSize.Dock]: 'h-full min-w-0 flex-1 flex-col p-0',
 };
 
 export interface ButtonProps extends ComponentPropsWithoutRef<'button'> {

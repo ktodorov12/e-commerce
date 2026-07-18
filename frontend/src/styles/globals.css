@@ -76,6 +76,11 @@
   );
 }
 
+/* Bottom padding that keeps page content clear of the fixed dock. */
+@utility dock-clearance {
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + var(--dock-clearance));
+}
+
 /* Kicker — small uppercase accent label (card-kicker in the system). */
 @utility kicker {
   font-size: var(--text-2xs);

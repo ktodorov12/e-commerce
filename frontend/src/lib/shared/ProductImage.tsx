@@ -17,6 +17,9 @@ export interface ProductImageProps {
   /** Aspect/layout come from the caller (e.g. `aspect-[3/4]`). */
   readonly className?: string;
   readonly placeholderLabel?: string;
+  /** Night blend suits product shots on dark grounds — turn it off for
+      lifestyle photography shot on light sets. */
+  readonly blendOnNight?: boolean;
 }
 
 export const ProductImage = ({
@@ -26,6 +29,7 @@ export const ProductImage = ({
   priority = false,
   className,
   placeholderLabel,
+  blendOnNight = true,
 }: ProductImageProps) => (
   <div
     className={cx(
@@ -40,7 +44,7 @@ export const ProductImage = ({
         fill
         sizes={sizes}
         priority={priority}
-        className="object-cover night:mix-blend-lighten"
+        className={cx('object-cover', blendOnNight && 'night:mix-blend-lighten')}
       />
     ) : (
       <span className="kicker absolute inset-0 flex items-center justify-center">
