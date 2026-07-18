@@ -1,0 +1,31 @@
+import { expect, test } from '@playwright/test';
+
+/**
+ * Phase-1 smoke suite: home → product → add-to-bag → cart drawer, against
+ * mock.shop. Assertions key on the user-facing copy in
+ * frontend/src/content/site.ts (mirrored here — tests/ does not import the app).
+ */
+test.describe('storefront smoke', () => {
+  test('home renders the hero', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.getByText('Quiet pieces, worn loud.')).toBeVisible();
+  });
+
+  test('product listing renders pieces from mock.shop', async ({ page }) => {
+    await page.goto('/products');
+    await expect(page.getByRole('heading', { name: 'All Pieces' })).toBeVisible();
+    await expect(page.locator('a[href^="/products/"]').first()).toBeVisible();
+  });
+
+  test('add to bag opens the cart with a checkout action', async ({ page }) => {
+    await page.goto('/products');
+    await page.locator('a[href^="/products/"]').first().click();
+
+    await expect(page).toHaveURL(/\/products\/.+/);
+    await page.getByRole('button', { name: 'Add to Bag' }).first().click();
+
+    // Adding a line auto-opens the cart drawer (see machines/cartMachine.ts),
+    // which surfaces the checkout hand-off.
+    await expect(page.getByRole('button', { name: 'Checkout' })).toBeVisible();
+  });
+});

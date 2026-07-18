@@ -1,0 +1,16 @@
+{
+  "name": "@exclusive-wear/tests",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Test configuration (Vitest, Playwright) and end-to-end specs. Unit tests colocate in frontend/src.",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.1",
+    "@types/node": "^26.1.1",
+    "typescript": "^5.9.3"
+  }
+}
