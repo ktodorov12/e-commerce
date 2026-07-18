@@ -14,6 +14,7 @@
   "dependencies": {
     "@exclusive-wear/shopify": "workspace:*",
     "@xstate/react": "^6.1.0",
+    "lucide-react": "^1.25.0",
     "next": "^16.2.10",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",

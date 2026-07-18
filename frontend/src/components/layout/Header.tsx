@@ -1,6 +1,7 @@
 import { siteContent } from '@/content/site';
 import { CartTrigger } from '@/components/layout/CartTrigger';
 import { MenuTrigger } from '@/components/layout/MenuTrigger';
+import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import { Link } from '@/lib/shared/Link';
 import { AppRoute } from '@/types/routes';
 
@@ -27,7 +28,10 @@ export const Header = () => (
         {siteContent.brand.name}
       </Link>
 
-      <CartTrigger />
+      <div className="flex items-center gap-1">
+        <ThemeToggle />
+        <CartTrigger />
+      </div>
     </div>
   </header>
 );

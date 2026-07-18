@@ -95,6 +95,7 @@ export const siteContent = {
     announcement: 'Announcements',
     galleryImage: 'Gallery image',
     themeSwitch: 'Appearance mode',
+    toggleTheme: 'Switch between day and night theme',
     mainNavigation: 'Main navigation',
   },
 } as const;

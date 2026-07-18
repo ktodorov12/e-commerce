@@ -34,6 +34,17 @@ export const resolveThemeMode = (preference: ThemeMode): ResolvedThemeMode => {
   return window.matchMedia(MediaQuery.PrefersDark).matches ? ThemeMode.Night : ThemeMode.Day;
 };
 
+/**
+ * The mode currently painted on the page — read from the attribute the
+ * pre-paint script (and this store) set on <html>. Client-only; call it from
+ * an event handler, where "what is on screen right now" is the truth a toggle
+ * needs. Anything that isn't Night reads as Day (the theme-init fallback).
+ */
+export const readAppliedTheme = (): ResolvedThemeMode => {
+  const applied = document.documentElement.getAttribute(DataAttribute.Theme);
+  return applied === ThemeMode.Night ? ThemeMode.Night : ThemeMode.Day;
+};
+
 /** 400ms crossfade around a switch (design), disabled for reduced motion. */
 const CROSSFADE_MS = 400;
 let crossfadeTimer: ReturnType<typeof setTimeout> | null = null;
