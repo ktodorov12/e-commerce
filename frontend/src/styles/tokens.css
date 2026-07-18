@@ -1,0 +1,168 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   Exclusive Wear — design tokens.
+   Source of truth: design/ (Nocturne system + "Ivory & Gold" day mode).
+
+   Two runtime palettes are swapped by html[data-theme='day' | 'night'];
+   the Tailwind theme below maps onto the runtime variables, so every
+   utility class (bg-ground, text-ink, border-divider, …) is mode-aware.
+   Components consume tokens only — never a raw hex, px or font name.
+   ════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Day — Ivory & Gold ──────────────────────────────────────────────
+     Warm ivory grounds, near-black warm ink, champagne gold as a line,
+     a kicker, a glow — never a flood. */
+  --ew-ground: #faf7f1;
+  --ew-surface: #ffffff;
+  --ew-ink: #1e1b16;
+  --ew-ink-muted: color-mix(in srgb, var(--ew-ink) 55%, transparent);
+  --ew-accent: #b4914e;
+  --ew-accent-ink: #8f7132; /* text-safe deep gold (like accent-300 on dark) */
+  --ew-accent-tint: #f3ebdb; /* fills, selected states */
+  --ew-divider: color-mix(in srgb, var(--ew-ink) 16%, transparent);
+
+  /* Day inversion: the primary commerce CTA is ink-filled on ivory
+     (the classic luxury black button); gold takes the outline role. */
+  --ew-cta-bg: var(--ew-ink);
+  --ew-cta-text: var(--ew-ground);
+  --ew-cta-border: var(--ew-ink);
+
+  /* Soft ink-tinted shadows on the light ground. */
+  --ew-shadow-sm: 0 0 0 1px color-mix(in srgb, var(--ew-ink) 10%, transparent);
+  --ew-shadow-md:
+    0 0 0 1px color-mix(in srgb, var(--ew-ink) 12%, transparent),
+    0 6px 18px color-mix(in srgb, var(--ew-ink) 14%, transparent);
+  --ew-shadow-lg:
+    0 0 0 1px color-mix(in srgb, var(--ew-ink) 16%, transparent),
+    0 16px 40px color-mix(in srgb, var(--ew-ink) 18%, transparent);
+
+  /* ── Motion (intensity from design/, all gated by reduced-motion) ── */
+  --motion-rise: 600ms;
+  --motion-stagger: 80ms;
+  --motion-zoom: 8s;
+  --motion-crossfade: 400ms;
+  --motion-drawer: 400ms;
+  --motion-marquee: 28s;
+
+  color-scheme: light;
+}
+
+[data-theme='night'] {
+  /* ── Night — Nocturne ────────────────────────────────────────────────
+     Near-neutral blue-grey ground, blurple accent as hairline and glow.
+     Contrast from tonal value, not saturation. */
+  --ew-ground: #161826;
+  --ew-surface: #232532;
+  --ew-ink: #e9e9ed;
+  --ew-ink-muted: color-mix(in srgb, var(--ew-ink) 55%, transparent);
+  --ew-accent: #9184d9;
+  --ew-accent-ink: #d2cefd; /* accent-300 — text-safe on the dark ground */
+  --ew-accent-tint: #2b2741; /* accent-900 */
+  --ew-divider: color-mix(in srgb, var(--ew-ink) 16%, transparent);
+
+  /* Night: primary actions are outlined accent — never a fill. */
+  --ew-cta-bg: transparent;
+  --ew-cta-text: var(--ew-accent);
+  --ew-cta-border: var(--ew-accent);
+
+  /* Elevation on a dark ground: a hairline edge plus ambient darkness. */
+  --ew-shadow-sm: 0 0 0 1px #3f424d;
+  --ew-shadow-md: 0 0 0 1px #595d6c, 0 6px 18px rgba(0, 0, 0, 0.55);
+  --ew-shadow-lg: 0 0 0 1px #9397ab, 0 16px 40px rgba(0, 0, 0, 0.65);
+
+  color-scheme: dark;
+}
+
+@theme inline {
+  /* Drop Tailwind's default palette entirely: color utilities exist only
+     for the roles below (no bg-red-500, no ad-hoc values in components). */
+  --color-*: initial;
+  --color-ground: var(--ew-ground);
+  --color-surface: var(--ew-surface);
+  --color-ink: var(--ew-ink);
+  --color-ink-muted: var(--ew-ink-muted);
+  --color-accent: var(--ew-accent);
+  --color-accent-ink: var(--ew-accent-ink);
+  --color-accent-tint: var(--ew-accent-tint);
+  --color-divider: var(--ew-divider);
+  --color-cta: var(--ew-cta-bg);
+  --color-cta-text: var(--ew-cta-text);
+  --color-cta-border: var(--ew-cta-border);
+
+  /* Inter over Inter; hierarchy by size and space, never bolding. */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-weight-heading: 500;
+
+  /* Compact 0.70× density: spacing unit = 2.8px, so p-1/2/3/4/6/8 land
+     exactly on the Nocturne --space-1/2/3/4/6/8 scale. */
+  --spacing: 2.8px;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+
+  --shadow-sm: var(--ew-shadow-sm);
+  --shadow-md: var(--ew-shadow-md);
+  --shadow-lg: var(--ew-shadow-lg);
+
+  /* Fixed type scale (density moves spacing, not sizes). */
+  --text-h1: 42px;
+  --text-h1--line-height: 1.12;
+  --text-h1--letter-spacing: -0.015em;
+  --text-h2: 32px;
+  --text-h2--line-height: 1.12;
+  --text-h2--letter-spacing: -0.015em;
+  --text-h3: 25px;
+  --text-h3--line-height: 1.12;
+  --text-h4: 20px;
+  --text-h4--line-height: 1.2;
+  --text-h5: 16px;
+  --text-h5--line-height: 1.25;
+  --text-h6: 13px;
+  --text-h6--line-height: 1.3;
+  --text-h6--letter-spacing: 0.08em;
+  --text-base: 15px;
+  --text-base--line-height: 1.55;
+  --text-sm: 13px;
+  --text-sm--line-height: 1.45;
+  --text-xs: 11px;
+  --text-xs--line-height: 1.35;
+  --text-2xs: 10px;
+  --text-2xs--line-height: 1.3;
+  --text-2xs--letter-spacing: 0.1em;
+
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-marquee: marquee var(--motion-marquee) linear infinite;
+  --animate-rise: rise var(--motion-rise) var(--ease-soft) both;
+  --animate-slow-zoom: slow-zoom var(--motion-zoom) var(--ease-soft) forwards;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes slow-zoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.06);
+  }
+}

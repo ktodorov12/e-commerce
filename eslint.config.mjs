@@ -1,3 +1,4 @@
+import * as espree from 'espree';
 import next from 'eslint-config-next';
 import prettier from 'eslint-config-prettier';
 
@@ -40,6 +41,19 @@ const config = [
       // `next/script` with `beforeInteractive` belongs in `app/layout.tsx`
       // (see components/layout/ThemeScript.tsx — the pre-paint theme script).
       '@next/next/no-before-interactive-script-outside-document': 'off',
+    },
+  },
+  {
+    // eslint-config-next routes every non-TS file through @babel/eslint-parser
+    // with the 'next/babel' preset, which only resolves from frontend/. An
+    // editor linting a plain .mjs config from the workspace root then fails with
+    // "Cannot find module 'next/babel'". These files have no JSX, so parse them
+    // with ESLint's default parser (espree) and drop the Babel path entirely.
+    files: ['**/*.mjs'],
+    languageOptions: {
+      parser: espree,
+      sourceType: 'module',
+      ecmaVersion: 'latest',
     },
   },
   prettier,
