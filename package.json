@@ -1,0 +1,31 @@
+{
+  "name": "exclusive-wear",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Exclusive Wear — headless Shopify storefront (Next.js App Router + typed Storefront API layer)",
+  "packageManager": "pnpm@11.11.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @exclusive-wear/frontend dev",
+    "build": "pnpm --filter @exclusive-wear/frontend build",
+    "start": "pnpm --filter @exclusive-wear/frontend start",
+    "typecheck": "pnpm --recursive --sequential typecheck",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "pnpm test:unit && pnpm test:e2e",
+    "test:unit": "pnpm --filter @exclusive-wear/frontend test",
+    "test:e2e": "pnpm --filter @exclusive-wear/tests e2e",
+    "codegen": "pnpm --filter @exclusive-wear/shopify codegen"
+  },
+  "devDependencies": {
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.2.10",
+    "eslint-config-prettier": "10.1.8",
+    "prettier": "3.9.5",
+    "typescript": "5.9.3"
+  }
+}

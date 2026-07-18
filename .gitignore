@@ -1,0 +1,32 @@
+# dependencies
+node_modules/
+
+# next.js
+.next/
+out/
+next-env.d.ts
+
+# tests
+coverage/
+tests/test-results/
+tests/playwright-report/
+
+# typescript
+*.tsbuildinfo
+
+# env — .env.example is the only committed env file
+.env
+.env.*
+!.env.example
+
+# local schema cache for offline codegen (see shopify/codegen.ts)
+shopify/.schema/
+
+# os / editor noise
+.DS_Store
+Thumbs.db
+
+# stray pre-scaffold artifacts (left in place, not ours to delete)
+/_writetest.txt
+/_linktest
+design/

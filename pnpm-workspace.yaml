@@ -1,0 +1,17 @@
+packages:
+  - frontend
+  - shopify
+  - tests
+
+allowBuilds:
+  sharp: true
+  unrs-resolver: false
+
+minimumReleaseAgeExclude:
+  - postcss@8.5.17
+
+onlyBuiltDependencies:
+  - '@tailwindcss/oxide'
+  - esbuild
+  - sharp
+  - unrs-resolver

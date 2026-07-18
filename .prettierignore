@@ -1,0 +1,10 @@
+node_modules
+.next
+coverage
+pnpm-lock.yaml
+shopify/src/generated
+tests/test-results
+tests/playwright-report
+design
+.claude
+*.woff2
