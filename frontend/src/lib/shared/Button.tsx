@@ -10,25 +10,29 @@ import { cx } from '@/utils/cx';
  */
 
 const BASE_CLASSES =
-  'inline-flex cursor-pointer items-center justify-center gap-2 rounded-md border ' +
+  'inline-flex cursor-pointer items-center justify-center gap-2 rounded-md ' +
   'font-medium transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-45';
 
 const VARIANT_CLASSES: Readonly<Record<ButtonVariant, string>> = {
   [ButtonVariant.Cta]:
-    'border-cta-border bg-cta text-cta-text ' +
+    'border border-cta-border bg-cta text-cta-text ' +
     'hover:bg-[color-mix(in_srgb,var(--color-cta)_88%,var(--color-ground))] ' +
     'night:hover:bg-[color-mix(in_srgb,var(--color-accent)_12%,transparent)] ' +
     'night:active:bg-[color-mix(in_srgb,var(--color-accent)_22%,transparent)]',
   [ButtonVariant.Outline]:
-    'border-divider bg-[transparent] text-ink ' +
+    'border border-divider bg-[transparent] text-ink ' +
     'hover:bg-[color-mix(in_srgb,var(--color-ink)_7%,transparent)] ' +
     'active:bg-[color-mix(in_srgb,var(--color-ink)_14%,transparent)]',
   [ButtonVariant.Ghost]:
-    'border-[transparent] bg-[transparent] text-accent-ink ' +
+    'border border-[transparent] bg-[transparent] text-accent-ink ' +
     'hover:bg-[color-mix(in_srgb,var(--color-accent)_10%,transparent)] ' +
     'active:bg-[color-mix(in_srgb,var(--color-accent)_18%,transparent)]',
   [ButtonVariant.Dock]:
-    'border-[transparent] bg-[transparent] ' +
+    // No border-width at all (unlike the other variants) — the dock's Bag/Menu
+    // buttons sit in the same even flex-1 split as the plain <a> links, and a
+    // border (even transparent) throws that split off by its width, which
+    // visibly knocked the active-route dash and icons out of alignment.
+    'bg-[transparent] ' +
     'hover:bg-[color-mix(in_srgb,var(--color-ink)_7%,transparent)] ' +
     'active:bg-[color-mix(in_srgb,var(--color-ink)_14%,transparent)]',
 };

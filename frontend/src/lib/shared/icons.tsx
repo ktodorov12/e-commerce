@@ -7,9 +7,9 @@ import {
   Plus,
   Search,
   Send,
+  Shirt,
   ShoppingBag,
   SlidersHorizontal,
-  Store,
   X,
 } from 'lucide-react';
 import type { LucideIcon, LucideProps } from 'lucide-react';
@@ -38,7 +38,7 @@ export const CloseIcon = withHouseStyle(X);
 export const PlusIcon = withHouseStyle(Plus);
 export const MinusIcon = withHouseStyle(Minus);
 export const HomeIcon = withHouseStyle(House);
-export const ShopIcon = withHouseStyle(Store);
+export const ShopIcon = withHouseStyle(Shirt);
 export const SearchIcon = withHouseStyle(Search);
 export const HeartIcon = withHouseStyle(Heart);
 export const FilterIcon = withHouseStyle(SlidersHorizontal);
