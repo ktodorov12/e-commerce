@@ -42,12 +42,12 @@ export const CartLineItem = ({ line }: { readonly line: CartLine }) => {
         <Price price={line.cost} className="text-sm" />
 
         <div className="mt-2 flex items-center gap-4">
-          <div className="inline-flex items-center rounded-md border border-divider">
+          <div className="inline-flex items-center concentric-shell-0 border border-divider">
             <Button
               aria-label={siteContent.a11y.decreaseQuantity}
               disabled={isBusy || line.quantity <= 1}
               onClick={() => updateLine(line.id, line.quantity - 1)}
-              className="border-0 px-3 py-1 text-ink"
+              className="rounded-concentric! border-0 px-3 py-1 text-ink"
             >
               <MinusIcon size={12} />
             </Button>
@@ -56,7 +56,7 @@ export const CartLineItem = ({ line }: { readonly line: CartLine }) => {
               aria-label={siteContent.a11y.increaseQuantity}
               disabled={isBusy}
               onClick={() => updateLine(line.id, line.quantity + 1)}
-              className="border-0 px-3 py-1 text-ink"
+              className="rounded-concentric! border-0 px-3 py-1 text-ink"
             >
               <PlusIcon size={12} />
             </Button>

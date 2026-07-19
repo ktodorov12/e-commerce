@@ -34,7 +34,53 @@ export const parseEnumParam = <TValue extends string>(
   fallback: TValue,
 ): TValue => {
   if (raw === undefined) return fallback;
-  if (Array.isArray(raw)) throw new InvalidQueryParamError(param, raw.join(','));
+  if (Array.isArray(raw)) throw new InvalidQueryParamError(param, raw.join(LIST_SEPARATOR));
   if ((allowed as readonly string[]).includes(raw)) return raw as TValue;
   throw new InvalidQueryParamError(param, raw);
+};
+
+/** Multi-value facets travel as one comma-joined param (never repeated params). */
+const LIST_SEPARATOR = ',';
+
+/** Canonical serialization of a multi-select facet (used for the round-trip check too). */
+export const serializeEnumListParam = (values: readonly string[]): string =>
+  values.join(LIST_SEPARATOR);
+
+/**
+ * Map a comma-joined multi-select param onto a subset of an enum's values,
+ * failing closed. Canonical form is enum declaration order with no duplicates
+ * and no unknown tokens — anything whose canonical re-serialization differs
+ * from the incoming value is rejected, not repaired.
+ */
+export const parseEnumListParam = <TValue extends string>(
+  param: string,
+  raw: string | string[] | undefined,
+  allowed: readonly TValue[],
+): readonly TValue[] => {
+  if (raw === undefined) return [];
+  if (Array.isArray(raw)) throw new InvalidQueryParamError(param, raw.join(LIST_SEPARATOR));
+  const tokens = raw.split(LIST_SEPARATOR);
+  const selected = allowed.filter((value) => (tokens as readonly string[]).includes(value));
+  if (serializeEnumListParam(selected) !== raw) throw new InvalidQueryParamError(param, raw);
+  return selected;
+};
+
+/** Canonical whole-number form: no sign, no leading zeros, no separators. */
+const WHOLE_NUMBER_PATTERN = /^(0|[1-9]\d*)$/;
+
+/**
+ * Map a whole-number param (price bounds) onto its numeric domain, failing
+ * closed: absent → null; anything non-canonical or above `max` → throw.
+ */
+export const parseWholeNumberParam = (
+  param: string,
+  raw: string | string[] | undefined,
+  max: number,
+): number | null => {
+  if (raw === undefined) return null;
+  if (Array.isArray(raw)) throw new InvalidQueryParamError(param, raw.join(LIST_SEPARATOR));
+  if (!WHOLE_NUMBER_PATTERN.test(raw)) throw new InvalidQueryParamError(param, raw);
+  const value = Number.parseInt(raw, 10);
+  if (value > max) throw new InvalidQueryParamError(param, raw);
+  return value;
 };

@@ -50,13 +50,29 @@ export interface ProductVariant {
   readonly image: ShopImage | null;
 }
 
-export interface Product extends ProductSummary {
-  readonly description: string;
-  readonly descriptionHtml: string;
-  readonly productType: string;
+/**
+ * A listing-grid product: summary plus everything the grid's swipe
+ * gallery and quick-pick flow need (photos, options, variants) —
+ * without the PDP-only prose fields.
+ */
+export interface ProductListItem extends ProductSummary {
   readonly images: readonly ShopImage[];
   readonly options: readonly ProductOption[];
   readonly variants: readonly ProductVariant[];
+}
+
+/** One page of the product listing connection — the cursor and flag the
+    frontend needs to fetch the next page, alongside this page's items. */
+export interface ProductListPage {
+  readonly items: readonly ProductListItem[];
+  readonly hasNextPage: boolean;
+  readonly endCursor: string | null;
+}
+
+export interface Product extends ProductListItem {
+  readonly description: string;
+  readonly descriptionHtml: string;
+  readonly productType: string;
 }
 
 export interface Collection {
@@ -71,7 +87,8 @@ export interface FeaturedCollection {
   readonly id: string;
   readonly handle: string;
   readonly title: string;
-  readonly products: readonly ProductSummary[];
+  /** Full listing items — the home rail reuses the listing's product card. */
+  readonly products: readonly ProductListItem[];
 }
 
 export interface CartLineMerchandise {
@@ -124,4 +141,32 @@ export enum ProductSort {
 /** Shopify search query syntax fragments used by this layer. */
 export enum StorefrontSearchQuery {
   AvailableForSale = 'available_for_sale:true',
+}
+
+/** Searchable fields this layer filters on (Shopify search syntax). */
+export enum StorefrontSearchField {
+  Tag = 'tag',
+  Vendor = 'vendor',
+  VariantsPrice = 'variants.price',
+}
+
+/** Connectives of the Shopify search syntax. */
+export enum StorefrontSearchConnective {
+  And = ' AND ',
+  Or = ' OR ',
+}
+
+/**
+ * Structured catalog filters. Callers pass canonical values from their own
+ * typed domains (never raw user input); this layer still quotes/escapes every
+ * value before it enters the search query string. Prices are whole amounts in
+ * the store currency.
+ */
+export interface ProductListFilter {
+  /** Tag facets: values within a group OR together, groups AND together —
+      `[[tops, bottoms], [men]]` → `(tops OR bottoms) AND men`. */
+  readonly tagGroups?: ReadonlyArray<readonly string[]>;
+  readonly vendors?: readonly string[];
+  readonly minPrice?: number;
+  readonly maxPrice?: number;
 }

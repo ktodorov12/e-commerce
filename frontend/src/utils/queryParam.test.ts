@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
-import { InvalidQueryParamError, parseEnumParam } from './queryParam';
+import {
+  InvalidQueryParamError,
+  parseEnumListParam,
+  parseEnumParam,
+  parseWholeNumberParam,
+} from './queryParam';
 
 enum Sample {
   A = 'a',
@@ -38,5 +43,62 @@ describe('parseEnumParam', () => {
       expect((error as InvalidQueryParamError).param).toBe(PARAM);
       expect((error as InvalidQueryParamError).received).toBe('z');
     }
+  });
+});
+
+describe('parseEnumListParam', () => {
+  it('returns an empty selection when the value is absent', () => {
+    expect(parseEnumListParam(PARAM, undefined, allowed)).toEqual([]);
+  });
+
+  it('maps a single valid token', () => {
+    expect(parseEnumListParam(PARAM, 'b', allowed)).toEqual([Sample.B]);
+  });
+
+  it('maps a comma-joined list in canonical (declaration) order', () => {
+    expect(parseEnumListParam(PARAM, 'a,b', allowed)).toEqual([Sample.A, Sample.B]);
+  });
+
+  it('throws when any token is unknown (fails closed, does not repair)', () => {
+    expect(() => parseEnumListParam(PARAM, 'a,z', allowed)).toThrow(InvalidQueryParamError);
+  });
+
+  it('throws on duplicates — a URL we never emit', () => {
+    expect(() => parseEnumListParam(PARAM, 'a,a', allowed)).toThrow(InvalidQueryParamError);
+  });
+
+  it('throws on non-canonical order — a URL we never emit', () => {
+    expect(() => parseEnumListParam(PARAM, 'b,a', allowed)).toThrow(InvalidQueryParamError);
+  });
+
+  it('throws on a repeated (array) param', () => {
+    expect(() => parseEnumListParam(PARAM, ['a', 'b'], allowed)).toThrow(InvalidQueryParamError);
+  });
+});
+
+describe('parseWholeNumberParam', () => {
+  const MAX = 999;
+
+  it('returns null when the value is absent', () => {
+    expect(parseWholeNumberParam(PARAM, undefined, MAX)).toBeNull();
+  });
+
+  it('maps a canonical whole number', () => {
+    expect(parseWholeNumberParam(PARAM, '120', MAX)).toBe(120);
+    expect(parseWholeNumberParam(PARAM, '0', MAX)).toBe(0);
+  });
+
+  it('throws on non-canonical forms (sign, decimals, leading zeros, text)', () => {
+    for (const raw of ['-5', '+5', '1.5', '007', '12abc', '', ' 12']) {
+      expect(() => parseWholeNumberParam(PARAM, raw, MAX)).toThrow(InvalidQueryParamError);
+    }
+  });
+
+  it('throws above the domain maximum', () => {
+    expect(() => parseWholeNumberParam(PARAM, '1000', MAX)).toThrow(InvalidQueryParamError);
+  });
+
+  it('throws on a repeated (array) param', () => {
+    expect(() => parseWholeNumberParam(PARAM, ['1', '2'], MAX)).toThrow(InvalidQueryParamError);
   });
 });

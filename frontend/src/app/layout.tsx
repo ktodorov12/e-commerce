@@ -35,7 +35,7 @@ const greatVibes = localFont({
 export const metadata: Metadata = {
   title: {
     default: siteContent.brand.name,
-    template: `%s — ${siteContent.brand.legalName}`,
+    template: `%s - ${siteContent.brand.legalName}`,
   },
   description: siteContent.brand.description,
 };

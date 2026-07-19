@@ -24,7 +24,7 @@ export const ThemeSwitch = () => {
   return (
     <div className="flex flex-col gap-2">
       <span className="text-xs text-ink-muted">
-        {siteContent.nav.appearance} — {siteContent.nav.appearanceNote}
+        {siteContent.nav.appearance} · {siteContent.nav.appearanceNote}
       </span>
       <SegmentedControl
         options={OPTIONS}

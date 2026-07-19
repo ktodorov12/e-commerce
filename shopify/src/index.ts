@@ -20,7 +20,7 @@ export {
 } from './api';
 export type { GetProductsOptions } from './api';
 export { StorefrontRequestError } from './client';
-export { isShopifyHandle, isShopifyId } from './ids';
+export { isShopifyCursor, isShopifyHandle, isShopifyId } from './ids';
 export {
   resolveStorefrontConfig,
   ShopifyEnvVar,
@@ -30,7 +30,12 @@ export {
   StorefrontProvider,
 } from './config';
 export type { StorefrontConfig } from './config';
-export { ProductSort, StorefrontSearchQuery } from './types';
+export {
+  ProductSort,
+  StorefrontSearchConnective,
+  StorefrontSearchField,
+  StorefrontSearchQuery,
+} from './types';
 // The client preset emits CurrencyCode as a union type (not a runtime enum).
 export type { CurrencyCode } from './generated/graphql';
 export type {
@@ -43,6 +48,9 @@ export type {
   FeaturedCollection,
   Money,
   Product,
+  ProductListFilter,
+  ProductListItem,
+  ProductListPage,
   ProductOption,
   ProductSummary,
   ProductVariant,

@@ -44,12 +44,9 @@ export const ProductCardPartsFragmentDoc = graphql(`
   }
 `);
 
-export const ProductPartsFragmentDoc = graphql(`
-  fragment ProductParts on Product {
+export const ListingProductPartsFragmentDoc = graphql(`
+  fragment ListingProductParts on Product {
     ...ProductCardParts
-    description
-    descriptionHtml
-    productType
     images(first: 10) {
       nodes {
         ...ImageParts
@@ -64,6 +61,15 @@ export const ProductPartsFragmentDoc = graphql(`
         ...VariantParts
       }
     }
+  }
+`);
+
+export const ProductPartsFragmentDoc = graphql(`
+  fragment ProductParts on Product {
+    ...ListingProductParts
+    description
+    descriptionHtml
+    productType
   }
 `);
 
@@ -136,10 +142,20 @@ export const CartPartsFragmentDoc = graphql(`
 `);
 
 export const GetProductsDocument = graphql(`
-  query GetProducts($first: Int!, $sortKey: ProductSortKeys, $reverse: Boolean, $query: String) {
-    products(first: $first, sortKey: $sortKey, reverse: $reverse, query: $query) {
+  query GetProducts(
+    $first: Int!
+    $after: String
+    $sortKey: ProductSortKeys
+    $reverse: Boolean
+    $query: String
+  ) {
+    products(first: $first, after: $after, sortKey: $sortKey, reverse: $reverse, query: $query) {
       nodes {
-        ...ProductCardParts
+        ...ListingProductParts
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
       }
     }
   }
@@ -178,7 +194,7 @@ export const GetFeaturedCollectionDocument = graphql(`
         title
         products(first: $productsCount) {
           nodes {
-            ...ProductCardParts
+            ...ListingProductParts
           }
         }
       }

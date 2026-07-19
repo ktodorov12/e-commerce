@@ -81,6 +81,25 @@
   padding-bottom: calc(env(safe-area-inset-bottom, 0px) + var(--dock-clearance));
 }
 
+/* ── Concentric corners — R1 + D = R2 ────────────────────────────────
+   Nested rounded boxes only read as parallel when the inner radius is
+   the outer radius minus the distance between the two boxes. A shell
+   declares its geometry once — `concentric-shell-<padding-step>` is a
+   rounded-md box with the standard 1px `border` and that many spacing
+   steps of padding — and any child hugging its curve derives its radius
+   with `rounded-concentric` instead of picking a radius token by eye. */
+@utility concentric-shell-* {
+  --concentric-padding: calc(var(--spacing) * --value(integer));
+  /* Distance to a child = the shell's 1px border + its padding. */
+  --concentric-inner-radius: calc(var(--radius-md) - 1px - var(--concentric-padding));
+  border-radius: var(--radius-md);
+  padding: var(--concentric-padding);
+}
+
+@utility rounded-concentric {
+  border-radius: var(--concentric-inner-radius);
+}
+
 /* Kicker — small uppercase accent label (card-kicker in the system). */
 @utility kicker {
   font-size: var(--text-2xs);

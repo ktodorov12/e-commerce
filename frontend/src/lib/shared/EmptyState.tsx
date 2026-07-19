@@ -6,7 +6,7 @@ import type { NavigableRoute } from '@/types/routes';
  * Used by the Search and Saved stubs until those features land.
  */
 export interface EmptyStateProps {
-  readonly kicker: string;
+  readonly kicker?: string;
   readonly title: string;
   readonly body: string;
   readonly ctaLabel: string;
@@ -15,7 +15,7 @@ export interface EmptyStateProps {
 
 export const EmptyState = ({ kicker, title, body, ctaLabel, ctaRoute }: EmptyStateProps) => (
   <section className="mx-auto flex w-full max-w-[1200px] flex-col items-start gap-4 px-6 py-16">
-    <p className="kicker">{kicker}</p>
+    {kicker !== undefined ? <p className="kicker">{kicker}</p> : null}
     <h1 className="text-h2">{title}</h1>
     <p className="max-w-[46ch] text-sm text-ink-muted">{body}</p>
     <Link

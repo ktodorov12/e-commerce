@@ -8,6 +8,7 @@ import {
   Search,
   Send,
   ShoppingBag,
+  SlidersHorizontal,
   Store,
   X,
 } from 'lucide-react';
@@ -40,6 +41,7 @@ export const HomeIcon = withHouseStyle(House);
 export const ShopIcon = withHouseStyle(Store);
 export const SearchIcon = withHouseStyle(Search);
 export const HeartIcon = withHouseStyle(Heart);
+export const FilterIcon = withHouseStyle(SlidersHorizontal);
 /* lucide ships no brand icons — AtSign stands in for the Instagram handle. */
 export const InstagramIcon = withHouseStyle(AtSign);
 export const TelegramIcon = withHouseStyle(Send);

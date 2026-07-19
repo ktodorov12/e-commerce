@@ -21,7 +21,7 @@ export const CurrencySwitch = () => {
   return (
     <div className="flex flex-col gap-2">
       <span className="text-xs text-ink-muted">
-        {siteContent.nav.currency} — {siteContent.nav.currencyNote}
+        {siteContent.nav.currency} · {siteContent.nav.currencyNote}
       </span>
       <SegmentedControl
         options={OPTIONS}

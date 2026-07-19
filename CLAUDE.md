@@ -45,11 +45,17 @@ Push state **down** to the leaf that needs it. Isolate heavy subtrees via compos
 Apply `React.memo` **only where it demonstrably prevents re-renders**. If a component both owns
 state and renders heavy children, split it.
 
+**Reuse components — one component per concept.** A concept renders through the same component
+everywhere it appears; never grow a parallel variant per page. (The product card on the home rail
+**is** the listing's `ListingProductCard`, the pickers everywhere are the one `SegmentedControl`.)
+If a surface needs a different look, extend the shared component with a prop — don't fork it.
+
 ### 3. XState owns interaction state
 
 _What is clicked, what is in flight, what step we're on_ — drawer open/close lifecycle,
 add-to-cart flow, checkout steps, filter panels. Machines are fully typed, live in `machines/`,
-and are consumed through small hooks (`hooks/useCartMachine.ts`, `hooks/useMenuMachine.ts`).
+and are consumed through small hooks (`hooks/useCartMachine.ts`, `hooks/useMenuMachine.ts`,
+`hooks/useListingOverlayMachine.ts` — the listing's filter sheet + quick-pick sheet).
 
 ### 4. Zustand owns domain state
 
@@ -96,6 +102,10 @@ should understand a name without chasing its definition.
   spelled out (`ProductSort.PriceDesc`, `CartEventType.BeginCheckout`).
 - Clarity beats brevity every time. If a name needs a comment to explain what it holds, rename it.
 
+**No em dashes in copy.** UI text in `content/site.ts`, alt text, and inline labels never uses an
+em dash. Use a period, comma, or colon instead; a normal dash (`-`) is fine for short label/value
+pairs, matching the footer's region line.
+
 ---
 
 ## Security — never trust user input at the query boundary
@@ -119,10 +129,14 @@ Concretely: the app owns the **canonical** query state; the URL is a **projectio
 reading the URL, reconstruct the canonical state and assert it **round-trips** (re-serializing the
 parsed state equals the incoming param). If it doesn't round-trip, throw.
 
-Implemented by `utils/queryParam.ts` (`parseEnumParam`): absent → default, present-and-valid → the
-enum member, present-and-invalid or repeated → `InvalidQueryParamError`. `app/products/page.tsx` uses
-it for `sort` + `availability`. Tradeoff (accepted): a hand-typed bad `?sort=` shows an error boundary
-instead of the default listing.
+Implemented by `utils/queryParam.ts` (`parseEnumParam`, `parseEnumListParam`,
+`parseWholeNumberParam`): absent → default, present-and-valid → the domain member, anything
+non-canonical (unknown value, repeated param, duplicate/reordered list tokens, signed/zero-padded
+numbers, an inverted price range) → `InvalidQueryParamError`. `app/products/page.tsx` uses them for
+the whole listing query state (`sort`, `availability`, `type`, `gender`, `brand`,
+`price-min`/`price-max`) and `utils/listingUrl.ts` is the one serializer emitting that projection.
+Tradeoff (accepted): a hand-typed bad `?sort=` shows an error boundary instead of the default
+listing.
 
 ### The only user-derived strings allowed near Shopify
 
@@ -183,6 +197,12 @@ headings capped at weight 500 (hierarchy by size + space, never bolding). Icons:
 (18px, 1.5 stroke, `aria-hidden`), so components never import lucide directly.
 
 **Components consume tokens only — never a raw hex, px, or font name.** Rule 1 applies to design values.
+
+**Concentric corners:** nested rounded boxes follow `R_inner + distance = R_outer` — never two radius
+tokens picked by eye. The shell declares its geometry once (`concentric-shell-<padding-step>`, a
+rounded-md box with the standard 1px border); children hugging its curve use `rounded-concentric`,
+which derives the radius from the shell's variables (`globals.css`). SegmentedControl and the
+quantity steppers are the references.
 
 ### Composition rules (mobile-first — apply to every screen)
 

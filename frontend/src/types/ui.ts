@@ -27,6 +27,8 @@ export enum TagVariant {
 export enum DrawerSide {
   Right = 'right',
   Full = 'full',
+  /** Bottom sheet (design 1d) — filter and quick-pick panels. */
+  Bottom = 'bottom',
 }
 
 /** Visual treatments for curated collection capsules (CollectionsShowcase). */

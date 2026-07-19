@@ -1,3 +1,4 @@
+import { BrandFilter, GenderFilter, TypeFilter } from '@/types/catalog';
 import { InfoTopic } from '@/types/routes';
 import { CapsuleTone } from '@/types/ui';
 
@@ -11,7 +12,7 @@ export const siteContent = {
     name: 'EXCLUSIVE WEAR',
     legalName: 'Exclusive Wear',
     description:
-      'Contemporary luxury menswear and womenswear — cut in Portugal, finished by hand.',
+      'Contemporary luxury menswear and womenswear. Cut in Portugal, finished by hand.',
   },
   nav: {
     shopAll: 'Shop All',
@@ -26,7 +27,7 @@ export const siteContent = {
     night: 'NIGHT',
     auto: 'AUTO',
     currency: 'Currency',
-    currencyNote: 'Display only — checkout uses store currency',
+    currencyNote: 'Display only, checkout uses store currency',
     currencyEur: '€ EUR',
     currencyUsd: '$ USD',
     currencyBgn: 'лв BGN',
@@ -44,7 +45,7 @@ export const siteContent = {
   atelier: {
     kicker: 'THE ATELIER',
     headline: 'Cut in Portugal. Finished by hand.',
-    body: 'Every piece is produced in a single family-run atelier outside Porto — 40 people, no seasons rushed.',
+    body: 'Every piece is produced in a single family-run atelier outside Porto: 40 people, no seasons rushed.',
   },
   collections: {
     title: 'Collections',
@@ -62,22 +63,21 @@ export const siteContent = {
     title: 'Worn out there',
     handle: '@EXCLUSIVEWEAR',
     captions: {
-      portraitOne: 'Mara — Porto',
-      portraitTwo: 'Theo — Copenhagen',
-      portraitThree: 'Amira — Milan',
-      portraitFour: 'Jonas — Antwerp',
+      portraitOne: 'Mara, Porto',
+      portraitTwo: 'Theo, Copenhagen',
+      portraitThree: 'Amira, Milan',
+      portraitFour: 'Jonas, Antwerp',
     },
   },
   searchPage: {
     kicker: 'FIND A PIECE',
     title: 'Search',
-    body: 'Search is being tailored — browse the full collection meanwhile.',
+    body: 'Search is being tailored. Browse the full collection meanwhile.',
     cta: 'Shop all pieces',
   },
   savedPage: {
-    kicker: 'YOUR EDIT',
     title: 'Saved',
-    body: 'Nothing saved yet — tap the heart on a piece to keep it here.',
+    body: 'Nothing saved yet. Tap the heart on a piece to keep it here.',
     cta: 'Discover the drop',
   },
   footer: {
@@ -112,11 +112,11 @@ export const siteContent = {
       },
       [InfoTopic.Returns]: {
         title: 'Returns',
-        body: 'Free returns within a 14-day window — unworn, tags attached. Register the return from your order email and drop the parcel at any pickup point.',
+        body: 'Free returns within a 14-day window, unworn, tags attached. Register the return from your order email and drop the parcel at any pickup point.',
       },
       [InfoTopic.Payment]: {
         title: 'Payment',
-        body: 'Visa, Mastercard, PayPal, Klarna and cash on delivery. Every payment runs through Shopify checkout — card details never touch our servers.',
+        body: 'Visa, Mastercard, PayPal, Klarna and cash on delivery. Every payment runs through Shopify checkout. Card details never touch our servers.',
       },
       [InfoTopic.TrackOrder]: {
         title: 'Track order',
@@ -128,17 +128,20 @@ export const siteContent = {
       },
       [InfoTopic.Privacy]: {
         title: 'Privacy policy',
-        body: 'We collect only what an order needs — no tracking pixels, no resold data. The full policy ships with the launch release.',
+        body: 'We collect only what an order needs: no tracking pixels, no resold data. The full policy ships with the launch release.',
       },
       [InfoTopic.LegalNotice]: {
         title: 'Legal notice',
-        body: 'Exclusive Wear — registered in Portugal. Full company details are published with the launch release.',
+        body: 'Exclusive Wear, registered in Portugal. Full company details are published with the launch release.',
       },
       [InfoTopic.Contact]: {
         title: 'Contact',
-        body: 'Write to hello@exclusivewear.example — we answer within one business day, Monday to Friday.',
+        body: 'Write to hello@exclusivewear.example. We answer within one business day, Monday to Friday.',
       },
     },
+  },
+  loading: {
+    label: 'Loading',
   },
   trust: [
     { title: '2–4 day delivery', note: 'Based in Europe' },
@@ -155,8 +158,41 @@ export const siteContent = {
     sortPriceAsc: 'Price ↑',
     sortPriceDesc: 'Price ↓',
     availabilityInStock: 'In stock',
-    empty: 'Nothing here yet — check back after the next drop.',
+    empty: 'Nothing here yet. Check back after the next drop.',
     badgeNew: 'NEW',
+    /** "Men · Tops" heading composition (facet · value joiners). */
+    headingFacetJoiner: ' · ',
+    headingValueJoiner: ' & ',
+    filters: {
+      trigger: 'Filter',
+      title: 'Filter',
+      typeGroup: 'TYPE',
+      genderGroup: 'GENDER',
+      brandGroup: 'BRAND',
+      priceGroup: 'PRICE',
+      availabilityGroup: 'AVAILABILITY',
+      priceFrom: 'From',
+      priceTo: 'To',
+      removeAll: 'Remove all',
+      apply: 'Apply',
+      typeLabels: {
+        [TypeFilter.Tops]: 'Tops',
+        [TypeFilter.Bottoms]: 'Bottoms',
+        [TypeFilter.Shoes]: 'Shoes',
+        [TypeFilter.Accessories]: 'Accessories',
+      },
+      genderLabels: {
+        [GenderFilter.Men]: 'Men',
+        [GenderFilter.Women]: 'Women',
+      },
+      brandLabels: {
+        [BrandFilter.MockShop]: 'Mock.shop',
+      },
+    },
+    quickPick: {
+      title: 'Quick add',
+      quantity: 'Quantity',
+    },
   },
   pdp: {
     galleryHint: 'SWIPE →',
@@ -181,7 +217,7 @@ export const siteContent = {
     checkout: 'Checkout',
     redirecting: 'Opening checkout…',
     remove: 'Remove',
-    lineError: 'Something went wrong — try again.',
+    lineError: 'Something went wrong. Try again.',
     shippingNote: 'Shipping and taxes calculated at checkout.',
   },
   a11y: {
@@ -189,6 +225,12 @@ export const siteContent = {
     closeMenu: 'Close menu',
     openCart: 'Open bag',
     closeCart: 'Close bag',
+    openFilters: 'Open filters',
+    closeFilters: 'Close filters',
+    addToSaved: 'Save piece',
+    removeFromSaved: 'Remove from saved',
+    quickAdd: 'Quick add to bag',
+    closeQuickAdd: 'Close quick add',
     increaseQuantity: 'Increase quantity',
     decreaseQuantity: 'Decrease quantity',
     productImage: 'Product image',

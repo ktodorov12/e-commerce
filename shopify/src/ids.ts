@@ -22,3 +22,14 @@ export const isShopifyHandle = (value: unknown): value is string =>
   value.length > 0 &&
   value.length <= SHOPIFY_HANDLE_MAX_LENGTH &&
   SHOPIFY_HANDLE_PATTERN.test(value);
+
+/** Connection cursors (`pageInfo.endCursor`) are opaque base64(-url) tokens —
+    shape-validated the same way before a client hands one back for the next page. */
+const SHOPIFY_CURSOR_PATTERN = /^[A-Za-z0-9+/_-]+={0,2}$/;
+const SHOPIFY_CURSOR_MAX_LENGTH = 512;
+
+export const isShopifyCursor = (value: unknown): value is string =>
+  typeof value === 'string' &&
+  value.length > 0 &&
+  value.length <= SHOPIFY_CURSOR_MAX_LENGTH &&
+  SHOPIFY_CURSOR_PATTERN.test(value);

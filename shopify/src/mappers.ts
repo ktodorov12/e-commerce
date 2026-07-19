@@ -1,6 +1,7 @@
 import type {
   CartPartsFragment,
   ImagePartsFragment,
+  ListingProductPartsFragment,
   MoneyPartsFragment,
   ProductCardPartsFragment,
   ProductPartsFragment,
@@ -13,6 +14,7 @@ import type {
   FeaturedCollection,
   Money,
   Product,
+  ProductListItem,
   ProductSummary,
   ProductVariant,
   ShopImage,
@@ -75,14 +77,20 @@ const toVariant = (variant: VariantPartsFragment): ProductVariant => ({
   image: toImage(variant.image),
 });
 
-export const toProduct = (product: ProductPartsFragment): Product => ({
+export const toProductListItem = (product: ListingProductPartsFragment): ProductListItem => ({
   ...toProductSummary(product),
+  images: product.images.nodes
+    .map((node) => toImage(node))
+    .filter((img): img is ShopImage => img !== null),
+  options: product.options.map((option) => ({ name: option.name, values: option.values })),
+  variants: product.variants.nodes.map(toVariant),
+});
+
+export const toProduct = (product: ProductPartsFragment): Product => ({
+  ...toProductListItem(product),
   description: product.description,
   descriptionHtml: product.descriptionHtml,
   productType: product.productType,
-  images: product.images.nodes.map((node) => toImage(node)).filter((img): img is ShopImage => img !== null),
-  options: product.options.map((option) => ({ name: option.name, values: option.values })),
-  variants: product.variants.nodes.map(toVariant),
 });
 
 type CartLineNode = CartPartsFragment['lines']['nodes'][number];
@@ -138,12 +146,12 @@ export interface FeaturedCollectionNode {
   readonly id: string;
   readonly handle: string;
   readonly title: string;
-  readonly products: { readonly nodes: readonly ProductCardPartsFragment[] };
+  readonly products: { readonly nodes: readonly ListingProductPartsFragment[] };
 }
 
 export const toFeaturedCollection = (collection: FeaturedCollectionNode): FeaturedCollection => ({
   id: collection.id,
   handle: collection.handle,
   title: collection.title,
-  products: collection.products.nodes.map(toProductSummary),
+  products: collection.products.nodes.map(toProductListItem),
 });

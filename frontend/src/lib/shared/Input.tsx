@@ -6,9 +6,11 @@ import { cx } from '@/utils/cx';
 /** The only raw <input> wrapper. Label included — no unlabeled fields. */
 export interface InputProps extends ComponentPropsWithoutRef<'input'> {
   readonly label: string;
+  /** Static adornment inside the field's right edge (e.g. a currency sign). */
+  readonly suffix?: string;
 }
 
-export const Input = ({ label, className, id, ...props }: InputProps) => {
+export const Input = ({ label, suffix, className, id, ...props }: InputProps) => {
   const generatedId = useId();
   const inputId = id ?? generatedId;
   return (
@@ -16,16 +18,27 @@ export const Input = ({ label, className, id, ...props }: InputProps) => {
       <label htmlFor={inputId} className="mb-2 block text-xs text-ink-muted">
         {label}
       </label>
-      <input
-        id={inputId}
-        className={cx(
-          'w-full min-h-14 rounded-md border border-divider bg-surface px-4 py-2 text-sm text-ink',
-          'caret-accent placeholder:text-ink-muted',
-          'hover:border-[color-mix(in_srgb,var(--color-ink)_45%,transparent)]',
-          'focus-visible:border-accent focus-visible:outline-offset-0',
-        )}
-        {...props}
-      />
+      <div className="relative">
+        <input
+          id={inputId}
+          className={cx(
+            'w-full min-h-14 rounded-md border border-divider bg-surface px-4 py-2 text-sm text-ink',
+            'caret-accent placeholder:text-ink-muted',
+            'hover:border-[color-mix(in_srgb,var(--color-ink)_45%,transparent)]',
+            'focus-visible:border-accent focus-visible:outline-offset-0',
+            suffix !== undefined && 'pr-12',
+          )}
+          {...props}
+        />
+        {suffix !== undefined ? (
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-sm text-ink-muted"
+          >
+            {suffix}
+          </span>
+        ) : null}
+      </div>
     </div>
   );
 };

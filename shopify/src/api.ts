@@ -11,8 +11,13 @@ import {
   GetProductByHandleDocument,
   GetProductsDocument,
 } from './graphql/documents';
-import { toCart, toCollection, toFeaturedCollection, toProduct, toProductSummary } from './mappers';
-import { ProductSort, StorefrontSearchQuery } from './types';
+import { toCart, toCollection, toFeaturedCollection, toProduct, toProductListItem } from './mappers';
+import {
+  ProductSort,
+  StorefrontSearchConnective,
+  StorefrontSearchField,
+  StorefrontSearchQuery,
+} from './types';
 import type {
   Cart,
   CartLineDraft,
@@ -20,7 +25,9 @@ import type {
   Collection,
   FeaturedCollection,
   Product,
-  ProductSummary,
+  ProductListFilter,
+  ProductListItem,
+  ProductListPage,
 } from './types';
 
 /**
@@ -63,22 +70,81 @@ const SORT_MAPPING = {
 
 export interface GetProductsOptions {
   readonly first?: number;
+  /** Cursor from a previous page's `pageInfo.endCursor` — omit for page 1. */
+  readonly after?: string | null;
   readonly sort?: ProductSort;
   readonly availableOnly?: boolean;
+  readonly filter?: ProductListFilter;
 }
 
 const DEFAULT_PAGE_SIZE = 24;
 
-export const getProducts = async (options: GetProductsOptions = {}): Promise<ProductSummary[]> => {
-  const { first = DEFAULT_PAGE_SIZE, sort = ProductSort.Newest, availableOnly = false } = options;
+/** Quote a value for the Shopify search syntax (escape `\` and `"`). */
+const quoteSearchValue = (value: string): string =>
+  `"${value.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`;
+
+/** `(tag:"a" OR tag:"b")` — values within one field OR together. */
+const buildFieldClause = (
+  field: StorefrontSearchField,
+  values: readonly string[],
+): string | null => {
+  if (values.length === 0) return null;
+  const alternatives = values
+    .map((value) => `${field}:${quoteSearchValue(value)}`)
+    .join(StorefrontSearchConnective.Or);
+  return values.length > 1 ? `(${alternatives})` : alternatives;
+};
+
+const assertWholePrice = (value: number): number => {
+  if (!Number.isInteger(value) || value < 0) {
+    throw new RangeError(`Price filter bound must be a non-negative integer, got ${value}`);
+  }
+  return value;
+};
+
+/** Clauses AND together across facets; within a facet, values OR. */
+const buildProductSearchQuery = (
+  availableOnly: boolean,
+  filter: ProductListFilter,
+): string | null => {
+  const clauses: string[] = [];
+  if (availableOnly) clauses.push(StorefrontSearchQuery.AvailableForSale);
+  for (const tagGroup of filter.tagGroups ?? []) {
+    const tagClause = buildFieldClause(StorefrontSearchField.Tag, tagGroup);
+    if (tagClause !== null) clauses.push(tagClause);
+  }
+  const vendorClause = buildFieldClause(StorefrontSearchField.Vendor, filter.vendors ?? []);
+  if (vendorClause !== null) clauses.push(vendorClause);
+  if (filter.minPrice !== undefined) {
+    clauses.push(`${StorefrontSearchField.VariantsPrice}:>=${assertWholePrice(filter.minPrice)}`);
+  }
+  if (filter.maxPrice !== undefined) {
+    clauses.push(`${StorefrontSearchField.VariantsPrice}:<=${assertWholePrice(filter.maxPrice)}`);
+  }
+  return clauses.length > 0 ? clauses.join(StorefrontSearchConnective.And) : null;
+};
+
+export const getProducts = async (options: GetProductsOptions = {}): Promise<ProductListPage> => {
+  const {
+    first = DEFAULT_PAGE_SIZE,
+    after = null,
+    sort = ProductSort.Newest,
+    availableOnly = false,
+    filter = {},
+  } = options;
   const { sortKey, reverse } = SORT_MAPPING[sort];
   const data = await executeStorefront(GetProductsDocument, {
     first,
+    after,
     sortKey,
     reverse,
-    query: availableOnly ? StorefrontSearchQuery.AvailableForSale : null,
+    query: buildProductSearchQuery(availableOnly, filter),
   });
-  return data.products.nodes.map(toProductSummary);
+  return {
+    items: data.products.nodes.map(toProductListItem),
+    hasNextPage: data.products.pageInfo.hasNextPage,
+    endCursor: data.products.pageInfo.endCursor ?? null,
+  };
 };
 
 export const getProductByHandle = async (handle: string): Promise<Product | null> => {

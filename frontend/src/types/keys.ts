@@ -7,12 +7,18 @@ export enum CookieKey {
 export enum StorageKey {
   ThemePreference = 'ew.theme.v1',
   CurrencyPreference = 'ew.currency.v1',
+  SavedProducts = 'ew.saved.v1',
 }
 
 /** URL query parameters understood by the product listing. */
 export enum QueryParamKey {
   Sort = 'sort',
   Availability = 'availability',
+  Type = 'type',
+  Gender = 'gender',
+  Brand = 'brand',
+  PriceMin = 'price-min',
+  PriceMax = 'price-max',
 }
 
 /** Data attributes we set on <html>. */

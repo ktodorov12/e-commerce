@@ -29,6 +29,10 @@ const PANEL_CLASSES: Readonly<Record<DrawerSide, { readonly base: string; readon
     base: 'inset-0',
     closed: '-translate-y-full',
   },
+  [DrawerSide.Bottom]: {
+    base: 'inset-x-0 bottom-0 max-h-[85dvh] rounded-t-lg border-t border-divider md:mx-auto md:max-w-[480px] md:border-x',
+    closed: 'translate-y-full',
+  },
 };
 
 export const Drawer = ({ open, onClose, side = DrawerSide.Right, label, children }: DrawerProps) => {

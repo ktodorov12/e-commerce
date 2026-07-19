@@ -1,6 +1,14 @@
 import type { Money } from '@exclusive-wear/shopify';
 
-import { Locale } from '@/types/i18n';
+import { CurrencyPreference, Locale } from '@/types/i18n';
+
+/**
+ * The storefront is EUR-branded, so prices always render in EUR regardless
+ * of the backend's currency code (mock.shop reports CAD) — a deliberate
+ * display override until multi-market backends land. Checkout still uses
+ * the store currency.
+ */
+const DISPLAY_CURRENCY = CurrencyPreference.Eur;
 
 const formatterCache = new Map<string, Intl.NumberFormat>();
 
@@ -8,13 +16,13 @@ const formatterCache = new Map<string, Intl.NumberFormat>();
 export const formatMoney = (money: Money): string => {
   const amount = Number.parseFloat(money.amount);
   const isRound = Number.isInteger(amount);
-  const cacheKey = `${money.currencyCode}:${isRound ? 0 : 2}`;
+  const cacheKey = `${DISPLAY_CURRENCY}:${isRound ? 0 : 2}`;
 
   let formatter = formatterCache.get(cacheKey);
   if (!formatter) {
     formatter = new Intl.NumberFormat(Locale.Default, {
       style: 'currency',
-      currency: money.currencyCode,
+      currency: DISPLAY_CURRENCY,
       minimumFractionDigits: isRound ? 0 : 2,
       maximumFractionDigits: isRound ? 0 : 2,
     });
@@ -22,6 +30,21 @@ export const formatMoney = (money: Money): string => {
   }
   return formatter.format(amount);
 };
+
+/** The bare display-currency sign ("€") — for adorning price inputs. */
+export const displayCurrencySymbol = (): string => {
+  const parts = new Intl.NumberFormat(Locale.Default, {
+    style: 'currency',
+    currency: DISPLAY_CURRENCY,
+  }).formatToParts(0);
+  return parts.find((part) => part.type === 'currency')?.value ?? DISPLAY_CURRENCY;
+};
+
+/** Line total for a quantity — the quick-pick CTA shows price × quantity. */
+export const multiplyMoney = (money: Money, quantity: number): Money => ({
+  amount: (Number.parseFloat(money.amount) * quantity).toFixed(2),
+  currencyCode: money.currencyCode,
+});
 
 /** "−30%" style markdown label for compare-at prices. */
 export const formatDiscount = (price: Money, compareAt: Money): string => {

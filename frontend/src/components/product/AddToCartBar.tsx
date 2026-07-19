@@ -22,7 +22,7 @@ export const AddToCartBar = ({ variant }: { readonly variant: ProductVariant | n
     ? siteContent.pdp.unavailable
     : mutating
       ? siteContent.pdp.adding
-      : `${siteContent.pdp.addToBag} — ${formatMoney(variant.price)}`;
+      : `${siteContent.pdp.addToBag} · ${formatMoney(variant.price)}`;
 
   return (
     <div className="sticky bottom-0 -mx-6 border-t border-divider bg-[color-mix(in_srgb,var(--color-ground)_92%,transparent)] px-6 py-4 backdrop-blur-md md:static md:m-0 md:border-0 md:bg-[transparent] md:p-0 md:backdrop-blur-none">

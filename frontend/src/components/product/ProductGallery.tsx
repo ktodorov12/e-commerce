@@ -43,7 +43,7 @@ export const ProductGallery = ({
           <ProductImage
             key={image.url}
             image={image}
-            alt={`${title} — ${siteContent.a11y.galleryImage} ${index + 1}`}
+            alt={`${title}, ${siteContent.a11y.galleryImage} ${index + 1}`}
             sizes="(max-width: 768px) 100vw, 50vw"
             priority={index === 0}
             className="aspect-[3/4] w-full shrink-0 snap-center"
@@ -54,7 +54,7 @@ export const ProductGallery = ({
       {images.length > 1 ? (
         <figcaption className="mt-3 flex items-center justify-between px-1">
           <span className="kicker">
-            {activeIndex + 1} / {images.length} — {siteContent.pdp.galleryHint}
+            {activeIndex + 1} / {images.length} · {siteContent.pdp.galleryHint}
           </span>
           <span className="flex items-center gap-2" aria-hidden="true">
             {images.map((image, index) => (

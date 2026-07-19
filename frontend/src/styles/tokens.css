@@ -43,6 +43,8 @@
   --motion-crossfade: 400ms;
   --motion-drawer: 400ms;
   --motion-drift: 9s;
+  /* Sliding selection indicator (segmented controls, dock tick). */
+  --motion-switch: 250ms;
 
   /* Top bar height — the hero fills the viewport minus exactly this. */
   --topbar-height: 58px;
@@ -152,6 +154,7 @@
   --animate-rise: rise var(--motion-rise) var(--ease-soft) both;
   --animate-slow-zoom: slow-zoom var(--motion-zoom) var(--ease-soft) forwards;
   --animate-drift: drift var(--motion-drift) ease-in-out infinite;
+  --animate-badge-pop: badge-pop var(--motion-switch) var(--ease-soft) both;
 }
 
 /* Ambient glow drift behind the campaign film placeholder (design 1b). */
@@ -183,5 +186,17 @@
   }
   to {
     transform: scale(1.06);
+  }
+}
+
+/* Count bubble appearing beside a dock icon (saved heart, bag dot). */
+@keyframes badge-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  to {
+    opacity: 1;
+    transform: none;
   }
 }

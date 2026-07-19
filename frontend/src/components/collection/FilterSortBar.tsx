@@ -1,21 +1,26 @@
 'use client';
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useCallback } from 'react';
+import { useTransition } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import { ProductSort } from '@exclusive-wear/shopify';
 
 import { siteContent } from '@/content/site';
+import { useListingOverlayActions } from '@/hooks/useListingOverlayMachine';
+import { Button } from '@/lib/shared/Button';
+import { FilterIcon } from '@/lib/shared/icons';
+import { LoadingOverlay } from '@/lib/shared/LoadingOverlay';
 import { SegmentedControl } from '@/lib/shared/SegmentedControl';
 import { Tag } from '@/lib/shared/Tag';
-import { AvailabilityFilter } from '@/types/catalog';
-import { QueryParamKey } from '@/types/keys';
+import { countSelectedFilters } from '@/types/catalog';
+import type { ListingFilterSelection } from '@/types/catalog';
 import { TagVariant } from '@/types/ui';
-import { cx } from '@/utils/cx';
+import { buildListingSearchParams } from '@/utils/listingUrl';
 
 /**
- * Basic filters (design 1d): sort + availability, driven entirely by the
- * URL — the listing itself refetches on the server. Sticky under the
- * header with a blur backdrop.
+ * Listing controls (design 2c): the Filter tab with its picked-count badge
+ * opens the filter sheet; the sort control (newest / price up / price down)
+ * sits beside it. Deliberately not sticky — the bar scrolls away with the
+ * heading, nothing follows the grid.
  */
 
 const SORT_OPTIONS = [
@@ -26,53 +31,50 @@ const SORT_OPTIONS = [
 
 export interface FilterSortBarProps {
   readonly sort: ProductSort;
-  readonly availability: AvailabilityFilter;
+  readonly selection: ListingFilterSelection;
 }
 
-export const FilterSortBar = ({ sort, availability }: FilterSortBarProps) => {
+export const FilterSortBar = ({ sort, selection }: FilterSortBarProps) => {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const { openFilters } = useListingOverlayActions();
+  // The refetch can be slow — the transition's pending state drives the
+  // loading overlay while the sorted listing streams in.
+  const [isSortPending, startSortTransition] = useTransition();
 
-  const setParam = useCallback(
-    (key: QueryParamKey, value: string | null) => {
-      const params = new URLSearchParams(searchParams);
-      if (value === null) params.delete(key);
-      else params.set(key, value);
-      const query = params.toString();
+  const selectedCount = countSelectedFilters(selection);
+
+  const applySort = (nextSort: ProductSort) => {
+    const query = buildListingSearchParams(selection, nextSort).toString();
+    startSortTransition(() => {
       router.replace(query.length > 0 ? `${pathname}?${query}` : pathname, { scroll: false });
-    },
-    [router, pathname, searchParams],
-  );
-
-  const inStockOnly = availability === AvailabilityFilter.InStock;
+    });
+  };
 
   return (
-    <div className="sticky top-[57px] z-30 -mx-6 mb-8 flex flex-wrap items-center justify-between gap-3 border-b border-divider bg-[color-mix(in_srgb,var(--color-ground)_88%,transparent)] px-6 py-3 backdrop-blur-md">
-      <button
-        type="button"
-        aria-pressed={inStockOnly}
-        onClick={() =>
-          setParam(
-            QueryParamKey.Availability,
-            inStockOnly ? null : AvailabilityFilter.InStock,
-          )
-        }
-        className="cursor-pointer"
+    <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
+      <LoadingOverlay active={isSortPending} />
+      <Button
+        onClick={openFilters}
+        aria-haspopup="dialog"
+        aria-label={siteContent.a11y.openFilters}
+        className="border-accent text-accent-ink"
+        data-testid="open-filters"
       >
-        <Tag
-          variant={inStockOnly ? TagVariant.Accent : TagVariant.Outline}
-          className={cx('transition-colors', !inStockOnly && 'border-divider text-ink-muted')}
-        >
-          {siteContent.listing.availabilityInStock}
-        </Tag>
-      </button>
+        <FilterIcon size={14} />
+        {siteContent.listing.filters.trigger}
+        {selectedCount > 0 ? (
+          <Tag variant={TagVariant.Accent} className="px-2 py-0">
+            {selectedCount}
+          </Tag>
+        ) : null}
+      </Button>
 
       <SegmentedControl
         label={siteContent.listing.sortLabel}
         options={SORT_OPTIONS}
         value={sort}
-        onChange={(value) => setParam(QueryParamKey.Sort, value)}
+        onChange={applySort}
       />
     </div>
   );
