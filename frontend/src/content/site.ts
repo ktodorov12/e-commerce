@@ -80,6 +80,12 @@ export const siteContent = {
     body: 'Nothing saved yet. Tap the heart on a piece to keep it here.',
     cta: 'Discover the drop',
   },
+  notFoundPage: {
+    kicker: '404',
+    title: 'Page not found',
+    body: 'This page does not exist or has moved. The collection is a tap away.',
+    cta: 'Continue shopping',
+  },
   footer: {
     customerService: 'Customer service',
     about: 'About us',
